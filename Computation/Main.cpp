@@ -1,4 +1,5 @@
 #include <iostream> // cout, cin
+#include <math.h>
 
 // Global constant expression.
 constexpr int32_t max = 100;
@@ -14,11 +15,28 @@ void use (int32_t number) {
     return;
 }
 
+void computation_4_4_2_1 () {
+    // local variables are intialized.
+    int32_t iterator {0};
+    int32_t square {0};
+
+    // print the squares of zero to one hundred.
+    while (iterator < 100) {
+        square = iterator * iterator;
+        std::cout << iterator << '\t' << square << '\n';
+        ++iterator;
+    }
+}
+
 void computation_4_4_1_3 () {
+    // local variables are initialized.
     char response {' '};
+
+    // obtain response from user.
     std::cout << "Do you prefer fish?" << std::endl;
     std::cin >> response;
 
+    // switch case only accepts integer or enumerate types.
     switch (response) {
         case 'Y':
             std::cout << "Great! You are in luck today." << std::endl;
@@ -72,6 +90,6 @@ void computation_4_4_1_0 () {
 }
 
 int main () {
-    computation_4_4_1_3();
+    computation_4_4_2_1();
     return 0;
 }
