@@ -4,6 +4,7 @@
 int32_t area (const int32_t length, const int32_t width) {
     // if length or width are negative, that is not a legal scalar value.
     if (length < 0 || width < 0) {
+        // throw an exception. If it is not caught, the program terminates.
        throw std::range_error("Both Length and Width must be non-negative.");
     }
     // calculate area and return.
@@ -25,7 +26,12 @@ void error_5_5_1 () {
     constexpr int32_t width {2};
 
     // try to calculate un-framed area.
-    user_area = area(length, width);
+    try {
+        user_area = area(length, width);
+    } catch (std::range_error e){
+        std::cout << "Oops! Bad arguments to area." << std::endl;
+    }
+    
     std::cout << user_area << std::endl;
 
     // try to calculate framed area.
