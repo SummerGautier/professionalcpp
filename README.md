@@ -1,9 +1,9 @@
-### Professional C++ Development
+## Professional C++ Development
 This project is about sharpening 'working' cpp skills into standardized development using C++20 and above. 
 The workbook being used for these local projects is "Programming: Principles and Practice Using C++" by Bjarne Stroustrap who created C++. 
 While the book was written on C++17 standard, the projects in this repository subsistute C++20 standard wherever it is known to the repo owner.
 
-## Compilation & Linker
+### Compilation & Linker
 CLang & LLVM toolkit were chosen for this journey due to the following features:
 - Library / Modular Design
 - Extensive AST to support IDE usage & more helpful diagnostics
