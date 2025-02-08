@@ -14,7 +14,28 @@ void use (int32_t number) {
     return;
 }
 
-void computation_4_4_1 () {
+void computation_4_4_1_3 () {
+    char response {' '};
+    std::cout << "Do you prefer fish?" << std::endl;
+    std::cin >> response;
+
+    switch (response) {
+        case 'Y':
+            std::cout << "Great! You are in luck today." << std::endl;
+            break;
+        case 'N':
+            std::cout << "That's unfortunate. It's all we have." << std::endl;
+            break;
+        case 'M':
+            std::cout << "Maybe? Well, perhaps I can persaude you..." << std::endl;
+            break;
+        default:
+            std::cout << "Try the fish anyways." << std::endl;
+            break;
+    }
+}
+
+void computation_4_4_1_1 () {
     // Always initialize variables.
     int32_t integer_a {0};
     int32_t integer_b {0};
@@ -31,7 +52,7 @@ void computation_4_4_1 () {
     }
 }
 
-void computation_4_3_0 () {
+void computation_4_4_1_0 () {
     // Initializing variables before operating.
     // Reserver the memory space for later.
     constexpr double PI {3.14159};
@@ -51,6 +72,6 @@ void computation_4_3_0 () {
 }
 
 int main () {
-    computation_4_4_1();
+    computation_4_4_1_3();
     return 0;
 }
