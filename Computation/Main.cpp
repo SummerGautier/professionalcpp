@@ -15,6 +15,11 @@ void use (int32_t number) {
     return;
 }
 
+// Utility function for suqareing int32. Using _local to differentiate from std::square
+int32_t square_local(int32_t x) {
+    return x * x;
+}
+
 void computation_4_4_2_1 () {
     // local variables are intialized.
     int32_t iterator {0};
@@ -22,8 +27,8 @@ void computation_4_4_2_1 () {
 
     // print the squares of zero to one hundred.
     while (iterator < 100) {
-        square = iterator * iterator;
-        std::cout << iterator << '\t' << square << '\n';
+        int32_t square_iterator = square_local(iterator);
+        std::cout << iterator << '\t' << square_iterator << '\n';
         ++iterator;
     }
 
