@@ -19,7 +19,7 @@ int32_t framed_area (const int32_t length, const int32_t width) {
     return area(length-frame_size, width-frame_size);
 }
 
-int error_5_5_1 () {
+int32_t error_5_5_1 () {
     double user_area {0};
     // length and width immutable and known at compile time.
     constexpr int32_t length {5};
@@ -42,19 +42,24 @@ int error_5_5_1 () {
     return EXIT_SUCCESS;
 }
 
-int error_5_5_3 () {
+int32_t error_5_5_3 () {
+    // area values are negative.
     constexpr int32_t length {-1};
     constexpr int32_t width {-2};
 
     try {
+        // try to calculate negative area.
         area(length, width);
+        // if successful, return status code.
         return EXIT_SUCCESS;
     } catch (std::exception& e) {
+        // catch and report exception.
         std::cerr << "error: " << e.what() << std::endl;
+        // return failure status code.
         return EXIT_FAILURE;
     }
 }
 
-int main () {
+int32_t main () {
     return error_5_5_3();
 }
