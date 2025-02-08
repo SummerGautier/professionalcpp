@@ -19,7 +19,7 @@ int32_t framed_area (const int32_t length, const int32_t width) {
     return area(length-frame_size, width-frame_size);
 }
 
-void error_5_5_1 () {
+int error_5_5_1 () {
     double user_area {0};
     // length and width immutable and known at compile time.
     constexpr int32_t length {5};
@@ -30,6 +30,7 @@ void error_5_5_1 () {
         user_area = area(length, width);
     } catch (std::range_error e){
         std::cout << "Oops! Bad arguments to area." << std::endl;
+        return EXIT_FAILURE;
     }
     
     std::cout << user_area << std::endl;
@@ -38,10 +39,22 @@ void error_5_5_1 () {
     user_area = framed_area(length, width);
     std::cout << user_area << std::endl;
 
-    return;
+    return EXIT_SUCCESS;
+}
+
+int error_5_5_3 () {
+    constexpr int32_t length {-1};
+    constexpr int32_t width {-2};
+
+    try {
+        area(length, width);
+        return EXIT_SUCCESS;
+    } catch (std::exception& e) {
+        std::cerr << "error: " << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
 }
 
 int main () {
-    error_5_5_1();
-    return 0;
+    return error_5_5_3();
 }
