@@ -11,7 +11,7 @@ CLang & LLVM toolkit were chosen for this journey due to the following features:
 - Codegen supports up to standard library C++23
 - Commercial Use Apache 2.0 software license (since we're learning professional standards)
 
-While most of these features are not terriblly important to this project, it was important to choose a toolchain that would support professional development later on--since real projects are the goal. 
+While most of these features are not terribly important to this project, it was important to choose a toolchain that would support professional development later on--since real projects are the goal. 
 
 ## Using This Project
 ### /Chapter Sub-Directories
