@@ -26,6 +26,16 @@ void computation_4_4_2_1 () {
         std::cout << iterator << '\t' << square << '\n';
         ++iterator;
     }
+
+    // local variables are initialized.
+    char alpha {'a'};
+    char current {'a'};
+
+    // print the increasing offset char until we reach letter z.
+    for (int offset{0}; current < 'z'; ++offset) {
+        current = char(alpha + offset);
+        std::cout << current << std::endl;
+    }
 }
 
 void computation_4_4_1_3 () {
