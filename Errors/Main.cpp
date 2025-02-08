@@ -22,14 +22,15 @@ int32_t framed_area (const int32_t length, const int32_t width) {
 int32_t error_5_5_1 () {
     double user_area {0};
     // length and width immutable and known at compile time.
-    constexpr int32_t length {5};
+    constexpr int32_t length {-5};
     constexpr int32_t width {2};
 
     // try to calculate un-framed area.
     try {
         user_area = area(length, width);
-    } catch (std::range_error e){
+    } catch (std::range_error& e){
         std::cout << "Oops! Bad arguments to area." << std::endl;
+        std::cerr << "error: " << e.what() << std::endl;
         return EXIT_FAILURE;
     }
     
@@ -39,6 +40,7 @@ int32_t error_5_5_1 () {
     user_area = framed_area(length, width);
     std::cout << user_area << std::endl;
 
+    // return success status code.
     return EXIT_SUCCESS;
 }
 
