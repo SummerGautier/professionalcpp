@@ -14,7 +14,24 @@ void use (int32_t number) {
     return;
 }
 
-int main () {
+void computation_4_4_1 () {
+    // Always initialize variables.
+    int32_t integer_a {0};
+    int32_t integer_b {0};
+    
+    // Obtain users input for locals.
+    std::cout << "Enter two integers: ";
+    std::cin >> integer_a >> integer_b;
+
+    // If statement chooses between two alternatives.
+    if (integer_a < integer_b) {
+        std::cout << "max: " << integer_b << std::endl;
+    } else {
+        std::cout << "max: " << integer_a << std::endl;
+    }
+}
+
+void computation_4_3_0 () {
     // Initializing variables before operating.
     // Reserver the memory space for later.
     constexpr double PI {3.14159};
@@ -31,5 +48,9 @@ int main () {
     // Report the results to the user.
     std::cout << "Circumference: " << circumference << std::endl;
     use(circumference);
+}
+
+int main () {
+    computation_4_4_1();
     return 0;
 }
