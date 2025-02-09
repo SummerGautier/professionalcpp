@@ -4,7 +4,7 @@
 int32_t area (const int32_t length, const int32_t width) {
     // if length or width are negative, that is not a legal scalar value.
     if (length < 0 || width < 0) {
-        // throw an exception. If it is not caught, the program terminates.
+        // just did a new text. throw an exception. If it is not caught, the program terminates.
        throw std::range_error("Both Length and Width must be non-negative.");
     }
     // calculate area and return.
