@@ -6,7 +6,7 @@
 
 /**
  * 
- * Class, Constants, & Functional Declarations.
+ * Classes & Functional Declarations.
  * 
  * */
 
@@ -42,7 +42,7 @@ class TokenStream {
 
 /**
  * 
- * GLOBAL CONSTANTS & SINGLETONS
+ * Global Constants & Singletons
  */
 
  
