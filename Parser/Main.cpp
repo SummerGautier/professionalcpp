@@ -3,6 +3,13 @@
 #include <vector>
 #include <iostream>
 
+
+/**
+ * 
+ * Class, Constants, & Functional Declarations.
+ * 
+ * */
+
 // represent the tokens.
 class Token;
 // represent a stream of tokens.
@@ -16,38 +23,46 @@ double EvaluatePrimary();
 // Token type represents an operator and an operand. 
 class Token {
     public:
-        char8_t kind;
+        char kind;
         double value;
 };
 // TokenStream represents a stream of inputs as tokens.
 class TokenStream {
     public:
-        // constructs a token stream object.
-        TokenStream();
         // obtains a token either from buffer or I/O.
         Token GetToken();
         // stores a token in the buffer.
         void PutBack(const Token _token);
     private:
-        // full discribes if there is space to store a returned token.
+        // Describes if there is space to store a returned token.
         bool full {false};
         // buffer is where we keep a token that has been returned.
         Token buffer;
 };
 
+/**
+ * 
+ * Implementation of Classes & Functions.
+ * 
+ * */
+
+// return a read Token back into TokenStream buffer.
 void TokenStream::PutBack(const Token _token) {
     // error on trying to overwrite non-empty buffer.
     if (this->full) {
         throw std::runtime_error("Failed PutBack() : TokenStream Buffer is full.");
     }
+
     // buffer is updated, overwite is allowed if  'official' state is empty (full=false)
     this->buffer = _token;
     // udpate official state to full.
     this->full = true;
+
     // void exit.
     return;
 }
 
+// read from I/O and construct Tokens to represent operands or numbers.
 Token TokenStream::GetToken() {
     // empty the buffer and reset full to false.
     if (this->full) {
@@ -56,48 +71,92 @@ Token TokenStream::GetToken() {
         // return buffer token.
         return this->buffer;
     }
+
     // obtain user input from keyboard.
     char _input {' '};
     std::cin >> _input;
+
     // check for kind and create token.
     switch (_input) {
-
+        // all of these cases fall through to "return Token with charachter as value"
+        case ';':
+        case 'q':
+        case '(': 
+        case ')': 
+        case '+': 
+        case '-': 
+        case '*': 
+        case '/':
+            return Token{_input}; // all the symbol cases are just single charachter tokens.
+            break;
+        case '.':
+        // the digit indicates we are about to read a number which may be multiple charachters.
+        case '0': 
+        case '1': 
+        case '2': 
+        case '3': 
+        case '4': 
+        case '5': 
+        case '6': 
+        case '7': 
+        case '8': 
+        case '9':
+            {
+               // return the digit back to the stream so it can be re-read.
+               std::cin.putback(_input);
+               // next read not just the digit but the whole next availabile number.
+               // cin will stop once a space or non-digit is encountered.
+               double _value;
+               std::cin >> _value;
+               // create a Token whose value is the complete number value read in.
+               // '8' is universal signifer we've chosen to mean 'number-type'. No relation to it's value.
+               return Token{'8', _value};
+              
+            }
+            break;
+        default:
+            throw std::runtime_error("Token is not valid.");
     }
 }
 
+// init token stream to translate charachters into operands.
+TokenStream _global_token_stream;
+
+// evaluate complete expressions into final result.
 double EvaluateExpression () {
     // the prior evaluated expression is left of the current expression.
     double _left = EvaluateTerm();
-    // init token stream to translate charachters into operands.
-    TokenStream _tokenStream;
-    Token _token = _tokenStream.GetToken();
+
+    Token _token = _global_token_stream.GetToken();
+
     // iteratively evaluate the right side and add to the left side.
     while (true) {
         switch (_token.kind) {
             // evaluate addition term.
             case '+':
                 _left = _left + EvaluateTerm();
-                _token = _tokenStream.GetToken();
+                _token = _global_token_stream.GetToken();
                 break;
             // evaluate substraction term.
             case '-':
-                _left = _left + EvaluateTerm();
-                _token = _tokenStream.GetToken();
+                _left = _left - EvaluateTerm();
+                _token = _global_token_stream.GetToken();
                 break;
             // return  unused token.
             default:
-                _tokenStream.PutBack(_token);
+                _global_token_stream.PutBack(_token);
                 return _left;
         }
     }
 }
 
+// evalute the numeric value of a term.
 double EvaluateTerm () {
     // the prior primary is left of the current Term.
     double _left = EvaluatePrimary();
-    // init token stream to translate charachters into operands.
-    TokenStream _tokenStream;
-    Token _token = _tokenStream.GetToken();
+
+    Token _token = _global_token_stream.GetToken();
+
     // iteratively evalute the right and operate on the left side.
     while (true) {
         switch (_token.kind) {
@@ -106,7 +165,7 @@ double EvaluateTerm () {
                 // scale multiplication on left term.
                 _left = _left * EvaluatePrimary();
                 // update token.
-                _token = _tokenStream.GetToken();
+                _token = _global_token_stream.GetToken();
                 break;
             // evaluate division term. 
             case '/':
@@ -119,25 +178,28 @@ double EvaluateTerm () {
                     // scale division on left term.
                     _left = _left / _divisor;
                     // update token.
-                    _token = _tokenStream.GetToken();
+                    _token = _global_token_stream.GetToken();
                     break;
                 }
             // return unused token to stream.
             default:
-                _tokenStream.PutBack(_token);
+                _global_token_stream.PutBack(_token);
                 return _left;
         }
     }
 }
 
+// interpret the numeric value of a primary.
 double EvaluatePrimary() {
-    TokenStream _tokenStream;
-    Token _token = _tokenStream.GetToken();
+
+    Token _token = _global_token_stream.GetToken();
+
+    // iteratively evalute the right and operate on the left side.
     switch (_token.kind) {
         case '(':
             {
                 double _value = EvaluateExpression();
-                _token = _tokenStream.GetToken();
+                _token = _global_token_stream.GetToken();
                 if (_token.kind != ')') {
                     throw std::runtime_error("expected ')'.");
                 }
@@ -150,15 +212,14 @@ double EvaluatePrimary() {
     }
 }
 
+// execute Full Calculation Loop & Deal with Exceptions.
 int32_t main () {
     // place holder for expression value.
     double _value {0};
-    // stream of tokens processor.
-    TokenStream _tokenStream;
     try {
         // continue until console input terminates.
         while (std::cin) {
-            Token _token = _tokenStream.GetToken();
+            Token _token = _global_token_stream.GetToken();
             // quite program if stop command is reached.
             if (_token.kind == 'q') {
                 return EXIT_SUCCESS;
@@ -167,10 +228,10 @@ int32_t main () {
             if (_token.kind == ';') {
                 std::cout << "=" << _value << std::endl;
             } else {
-                _tokenStream.PutBack(_token);
+                _global_token_stream.PutBack(_token);
+                // evaluate the next expression.
+                _value = EvaluateExpression();
             }
-            // evaluate the next expression.
-            _value = EvaluateExpression();
         }
     } catch (std::exception& errorRef ) {
         std::cerr << errorRef.what() << std::endl;
