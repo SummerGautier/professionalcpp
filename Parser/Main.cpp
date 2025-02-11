@@ -3,7 +3,6 @@
 #include <vector>
 #include <iostream>
 
-
 /**
  * 
  * Classes & Functional Declarations.
@@ -45,7 +44,6 @@ class TokenStream {
  * Global Constants & Singletons
  */
 
- 
 // init token stream to translate charachters into operands.
 TokenStream TOKEN_STREAM;
 // constant to represent token type 'number'.
