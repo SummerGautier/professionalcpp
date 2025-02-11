@@ -42,6 +42,17 @@ class TokenStream {
 
 /**
  * 
+ * GLOBAL CONSTANTS & SINGLETONS
+ */
+
+ 
+// init token stream to translate charachters into operands.
+TokenStream TOKEN_STREAM;
+// constant to represent token type 'number'.
+constexpr char NUMBER_TYPE ='8';
+
+/**
+ * 
  * Implementation of Classes & Functions.
  * 
  * */
@@ -88,7 +99,6 @@ Token TokenStream::GetToken() {
         case '*': 
         case '/':
             return Token{_input}; // all the symbol cases are just single charachter tokens.
-            break;
         case '.':
         // the digit indicates we are about to read a number which may be multiple charachters.
         case '0': 
@@ -110,24 +120,20 @@ Token TokenStream::GetToken() {
                std::cin >> _value;
                // create a Token whose value is the complete number value read in.
                // '8' is universal signifer we've chosen to mean 'number-type'. No relation to it's value.
-               return Token{'8', _value};
+               return Token{NUMBER_TYPE, _value};
               
             }
-            break;
         default:
             throw std::runtime_error("Token is not valid.");
     }
 }
-
-// init token stream to translate charachters into operands.
-TokenStream _global_token_stream;
 
 // evaluate complete expressions into final result.
 double EvaluateExpression () {
     // the prior evaluated expression is left of the current expression.
     double _left = EvaluateTerm();
 
-    Token _token = _global_token_stream.GetToken();
+    Token _token = TOKEN_STREAM.GetToken();
 
     // iteratively evaluate the right side and add to the left side.
     while (true) {
@@ -135,16 +141,16 @@ double EvaluateExpression () {
             // evaluate addition term.
             case '+':
                 _left = _left + EvaluateTerm();
-                _token = _global_token_stream.GetToken();
+                _token = TOKEN_STREAM.GetToken();
                 break;
             // evaluate substraction term.
             case '-':
                 _left = _left - EvaluateTerm();
-                _token = _global_token_stream.GetToken();
+                _token = TOKEN_STREAM.GetToken();
                 break;
             // return  unused token.
             default:
-                _global_token_stream.PutBack(_token);
+                TOKEN_STREAM.PutBack(_token);
                 return _left;
         }
     }
@@ -155,7 +161,7 @@ double EvaluateTerm () {
     // the prior primary is left of the current Term.
     double _left = EvaluatePrimary();
 
-    Token _token = _global_token_stream.GetToken();
+    Token _token = TOKEN_STREAM.GetToken();
 
     // iteratively evalute the right and operate on the left side.
     while (true) {
@@ -165,7 +171,7 @@ double EvaluateTerm () {
                 // scale multiplication on left term.
                 _left = _left * EvaluatePrimary();
                 // update token.
-                _token = _global_token_stream.GetToken();
+                _token = TOKEN_STREAM.GetToken();
                 break;
             // evaluate division term. 
             case '/':
@@ -178,12 +184,12 @@ double EvaluateTerm () {
                     // scale division on left term.
                     _left = _left / _divisor;
                     // update token.
-                    _token = _global_token_stream.GetToken();
+                    _token = TOKEN_STREAM.GetToken();
                     break;
                 }
             // return unused token to stream.
             default:
-                _global_token_stream.PutBack(_token);
+                TOKEN_STREAM.PutBack(_token);
                 return _left;
         }
     }
@@ -192,20 +198,20 @@ double EvaluateTerm () {
 // interpret the numeric value of a primary.
 double EvaluatePrimary() {
 
-    Token _token = _global_token_stream.GetToken();
+    Token _token = TOKEN_STREAM.GetToken();
 
     // iteratively evalute the right and operate on the left side.
     switch (_token.kind) {
         case '(':
             {
                 double _value = EvaluateExpression();
-                _token = _global_token_stream.GetToken();
+                _token = TOKEN_STREAM.GetToken();
                 if (_token.kind != ')') {
                     throw std::runtime_error("expected ')'.");
                 }
                 return _value;
             }
-        case '8':
+        case NUMBER_TYPE:
             return _token.value;
         default:
             throw std::runtime_error("primary expected.");
@@ -219,7 +225,9 @@ int32_t main () {
     try {
         // continue until console input terminates.
         while (std::cin) {
-            Token _token = _global_token_stream.GetToken();
+            // prompt
+            std::cout << "> ";
+            Token _token = TOKEN_STREAM.GetToken();
             // quite program if stop command is reached.
             if (_token.kind == 'q') {
                 return EXIT_SUCCESS;
@@ -228,7 +236,7 @@ int32_t main () {
             if (_token.kind == ';') {
                 std::cout << "=" << _value << std::endl;
             } else {
-                _global_token_stream.PutBack(_token);
+                TOKEN_STREAM.PutBack(_token);
                 // evaluate the next expression.
                 _value = EvaluateExpression();
             }
