@@ -24,7 +24,7 @@ int32_t main () {
             } else {
                 _tokenStream.PutBack(_token);
                 // evaluate the next expression.
-                _value = EvaluateExpression(_tokenStream);
+                _value = Parser::EvaluateExpression(_tokenStream);
             }
         }
     } catch (std::exception& errorRef ) {
