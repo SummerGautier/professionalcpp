@@ -64,7 +64,6 @@ Token TokenStream::GetToken() {
                std::cin >> _value;
                // create a Token whose value is the complete number value read in.
                return Token{NUMBER_TYPE, _value};
-              
             }
         default:
             throw std::runtime_error("Token is not valid.");
