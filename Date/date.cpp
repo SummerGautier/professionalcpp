@@ -7,7 +7,7 @@
  * Date
  */
 
-Date::Date (const int _year, const int _month, const int _day) {
+Date::Date (const int _year, const DateUtil::Month _month, const int _day) {
     // using initializer list {} to force failure if narrowing conversion.
     this->SetYear(_year);
     this->SetMonth(_month);
@@ -34,15 +34,7 @@ void Date::SetYear (const int _value) {
     return;
 }
 
-void Date::SetMonth (const int _value) {
-    // check that month is non-negative.
-    if (_value < 0) {
-        throw std::invalid_argument("Month cannot be negative.");
-    }
-    // ensure that month is a real value.
-    if (_value > 12) {
-        throw std::invalid_argument("Month greater than 12 is not valid.");
-    }
+void Date::SetMonth (const DateUtil::Month _value) {
     // update month from _value.
     this->month = _value;
     return;
@@ -66,7 +58,7 @@ int Date::GetYear () {
     return this->year;
 }
 
-int Date::GetMonth () {
+DateUtil::Month Date::GetMonth () {
     return this->month;
 }
 
