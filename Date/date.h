@@ -25,3 +25,14 @@ class Date {
         // single-byte since possible days < 255. unsigned since it must be positive.
         int day {0};
 };
+
+// Indicate '1' as starting index for months.
+enum class Month {
+    january=1, february, march, april, may, june, july,
+    august, september, october, novemeber, december
+};
+
+// Use default index '0' for days up to 6.
+enum class Day {
+    monday, tuesday, wednesday, thursday, friday
+};
