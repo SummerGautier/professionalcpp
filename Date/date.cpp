@@ -1,6 +1,11 @@
 #include <stdexcept>
 #include <climits>
 #include "date.h"
+#include <vector>
+
+/**
+ * Date
+ */
 
 Date::Date (const int _year, const int _month, const int _day) {
     // using initializer list {} to force failure if narrowing conversion.
@@ -67,4 +72,63 @@ int Date::GetMonth () {
 
 int Date::GetDay () {
     return this->day;
+}
+
+/** 
+ * Date Utils
+ */
+
+const std::vector<std::string> DateUtil::namesOfDays {
+    "sunday", "monday", "tuesday", "wednesday",
+    "friday", "saturday"
+};
+
+const std::vector<std::string> DateUtil::namesOfMonths {
+    "january", "february", "march", "april",
+    "may", "june", "july", "august", "september",
+    "october", "november", "december"
+};
+
+DateUtil::Month DateUtil::MonthFromInt (const int _x) {
+    // check if arg is less than january.
+    if (_x < int(DateUtil::Month::january)) {
+        throw std::invalid_argument("Month cannot convert int below 1.");
+    }
+    // check if arg is greater than december.
+    if (_x > int(DateUtil::Month::december)) {
+        throw std::invalid_argument("Month cannot convert int above 12.");
+    }
+    // if int is valid, return new Month object.
+    return DateUtil::Month {_x};
+}
+
+DateUtil::Day DateUtil::DayFromInt (const int _x) {
+    // check if arg is less than sunday.
+    if (_x < int(DateUtil::Day::sunday)) {
+        throw std::invalid_argument("Day cannot convert int below 0.");
+    }
+    // check if arg is greater than saturday.
+    if (_x > int(DateUtil::Day::saturday)) {
+        throw std::invalid_argument("Day cannot convert int above 6.");
+    }
+    //if int is valid return new Day object.
+    return DateUtil::Day {_x};
+}
+
+DateUtil::Month DateUtil::operator ++ (DateUtil::Month& _month) {
+    // if month is jan-nov, then increment by one to next month. i.e. jan->feb, feb->march, etc.
+    if (_month < DateUtil::Month::december) {
+        _month = DateUtil::Month(int(_month) + 1);
+        return _month;
+    }
+    // otherwise, if month is already december, then wrap around to january.
+    _month = DateUtil::Month::january;
+    return _month;
+}
+
+std::ostream& DateUtil::operator << (std::ostream& _os, DateUtil::Month _month) {
+    // calculate 0-based index.
+    int _index = int(_month) - int(DateUtil::Month::january);
+    // add month name as string to ostream.
+    return _os << DateUtil::namesOfMonths[_index];
 }

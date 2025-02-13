@@ -6,6 +6,9 @@
 int main () {
     // init _local date to beginning.
     Date _local {0,0,0};
+    DateUtil::Month _currentMonth = DateUtil::Month::february;
+    ++_currentMonth;
+    std::cout << _currentMonth << std::endl;
     // prompt for the year.
     std::cout << "Enter Date: " << std::endl;
     // locals to hold user input.

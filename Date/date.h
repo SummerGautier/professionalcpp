@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 class Date {
     public:
@@ -26,13 +27,28 @@ class Date {
         int day {0};
 };
 
-// Indicate '1' as starting index for months.
-enum class Month {
-    january=1, february, march, april, may, june, july,
-    august, september, october, novemeber, december
-};
-
-// Use default index '0' for days up to 6.
-enum class Day {
-    monday, tuesday, wednesday, thursday, friday
-};
+namespace DateUtil {
+    // 1-based indexing (declared with specified offset on first entry/january=1)
+    enum class Month {
+        january=1, february, march, april, may, 
+        june, july, august, september, october, 
+        novemeber, december
+    };
+    // 0-based indexing (default)
+    enum class Day {
+        sunday, monday, tuesday, wednesday, thursday, 
+        friday, saturday
+    };
+    // Map day to strings.
+    extern const std::vector<std::string> namesOfDays;
+    // Map month to string.
+    extern const std::vector<std::string> namesOfMonths;
+    // Use to convert valid integer to Month enum.
+    Month MonthFromInt (const int _x);
+    // Use to convert valid integer to Day enum.
+    Day DayFromInt (const int _x);
+    // Addition of Months.
+    Month operator ++ (DateUtil::Month& _month);
+    // Print out Months.
+    std::ostream& operator << (std::ostream& _os, DateUtil::Month _month);
+}
