@@ -16,7 +16,7 @@ std::string GetContent (const char _terminator) {
     
     { // using artificial local scope for safe filestream.
         // open input file stream.
-        std::ifstream _inFileStream {_inFileName};
+        std::ifstream _inFileStream {_inFileName, std::ios_base::in};
         // verify file was opened, escape if filestream is corrupted.
         if (!_inFileStream && _inFileStream.bad()) {
             // stream itself is corrupted, throw exception.
@@ -61,7 +61,7 @@ void WriteContent (const std::string& _content) {
 
     { // using artificial local scope for safe filestream. 
         // open output file stream.
-        std::ofstream _outFileStream {_outFileName};
+        std::ofstream _outFileStream {_outFileName, std::ios_base::out};
         // verify that the file was properly opened.
         if (!_outFileStream) {
             std::string message = std::format("can't open output file \'{}\'", _outFileName);
