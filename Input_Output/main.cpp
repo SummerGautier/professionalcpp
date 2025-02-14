@@ -56,8 +56,6 @@ int main () {
                 } else {
                     reading = false;
                 }
-                
-
             }
         }
     }
